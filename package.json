@@ -5,6 +5,7 @@
     "serverless-http": "^2.7.0"
   },
   "scripts": {
+    "build": "echo 'Placeholder for future build script'",
     "start": "netlify dev"
   }
 }

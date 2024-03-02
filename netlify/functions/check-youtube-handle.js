@@ -6,18 +6,19 @@ const app = express();
 
 app.get('/check-youtube-handle/:handle', async (req, res) => {
   const { handle } = req.params;
-  const url = `https://www.youtube.com/${handle}`;
 
-  console.log("HERE");
-  
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(`https://www.youtube.com/${handle}`);
     console.log(response);
 
     // If the request is successful, the channel exists
     if (response.status === 200) {
       res.json({ handle, exists: true });
     } else {
+      const response = await axios.get(`https://www.youtube.com/@${handle}`);
+      if (response.status === 200) {
+        res.json({ handle, exists: true });
+      }
       res.json({ handle, exists: false });
     }
   } catch (error) {

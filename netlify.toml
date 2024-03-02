@@ -1,0 +1,10 @@
+[build]
+  functions = "netlify/functions"
+  publish = "build"
+  command = "npm run build"
+[dev]
+  functions = "netlify/functions"
+[[redirects]]
+  from = "/check-youtube-handle/*"
+  to = "/.netlify/functions/check-youtube-handle/:splat"
+  status = 200

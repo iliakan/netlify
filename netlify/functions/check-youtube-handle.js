@@ -8,22 +8,26 @@ app.get('/check-youtube-handle/:handle', async (req, res) => {
   const { handle } = req.params;
 
   try {
-    const response = await axios.get(`https://www.youtube.com/${handle}`);
-    console.log(response);
+    await axios.get(`https://www.youtube.com/${handle}`);
 
     // If the request is successful, the channel exists
-    if (response.status === 200) {
-      res.json({ handle, exists: true });
-    } else {
-      const response = await axios.get(`https://www.youtube.com/@${handle}`);
-      if (response.status === 200) {
-        res.json({ handle, exists: true });
-      }
-      res.json({ handle, exists: false });
-    }
+    res.json({ handle, exists: true });
+    return;
   } catch (error) {
+
     if (error.response && error.response.status === 404) {
-      res.json({ handle, exists: false });
+      try {
+        await axios.get(`https://www.youtube.com/@${handle}`);
+        res.json({ handle, exists: true });
+        return;
+      } catch(error) {
+        if (error.response && error.response.status === 404) {
+          res.json({ handle, exists: false });
+          return;
+        } else {
+          throw error;
+        }
+      }
     } else {
       res.status(500).json({ error: 'Error checking handle' });
     }
